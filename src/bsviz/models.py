@@ -29,3 +29,12 @@ class ExecutionMode(str, Enum):
     MANUAL = "manual"
     AUTO = "auto"
     FAST_FORWARD = "fast_forward"
+
+@dataclass(frozen=True)
+class ComparisonEvent:
+    step: int
+    low: int
+    high: int
+    mid: int
+    value: Number
+    comparison: ComparisonResult
