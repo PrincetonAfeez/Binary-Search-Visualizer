@@ -48,3 +48,11 @@ def parse_array_text(text: str) -> tuple[Number, ...]:
         raise InvalidArrayError("array input did not contain any numbers")
     return tuple(parse_number(token) for token in tokens)
 
+def parse_number(raw: str) -> Number:
+    value = raw.strip()
+    if re.fullmatch(r"[+-]?\d+", value):
+        return int(value)
+    try:
+        return float(value)
+    except ValueError as exc:
+        raise InvalidArrayError(f"could not parse number {raw!r}") from exc
