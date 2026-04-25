@@ -1,3 +1,5 @@
+"""Array parsing and generation helpers."""
+
 from __future__ import annotations
 
 import argparse
@@ -16,7 +18,9 @@ PRESETS: dict[str, tuple[int, ...]] = {
     "duplicates": (1, 2, 2, 2, 4, 5, 5, 8, 13, 13, 21),
 }
 
+
 def add_source_arguments(parser: argparse.ArgumentParser) -> None:
+    """Add source arguments to the parser."""
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--array", help="comma- or space-separated numbers")
     source.add_argument("--file", type=Path, help="read numbers from a file")
@@ -26,8 +30,8 @@ def add_source_arguments(parser: argparse.ArgumentParser) -> None:
     source.add_argument("--preset", choices=sorted(PRESETS), help="use a teaching preset")
 
 
-
 def resolve_array(args: argparse.Namespace, seed: int | None = None) -> tuple[Number, ...]:
+    """Resolve the array from the arguments."""
     if args.array:
         return parse_array_text(args.array)
     if args.file:
@@ -42,13 +46,17 @@ def resolve_array(args: argparse.Namespace, seed: int | None = None) -> tuple[Nu
         return PRESETS[args.preset]
     return PRESETS["duplicates"]
 
+
 def parse_array_text(text: str) -> tuple[Number, ...]:
+    """Parse a comma-separated list of numbers."""
     tokens = [token for token in re.split(r"[\s,]+", text.strip()) if token]
     if not tokens:
         raise InvalidArrayError("array input did not contain any numbers")
     return tuple(parse_number(token) for token in tokens)
 
+
 def parse_number(raw: str) -> Number:
+    """Parse a number from a string."""
     value = raw.strip()
     if re.fullmatch(r"[+-]?\d+", value):
         return int(value)
@@ -57,7 +65,9 @@ def parse_number(raw: str) -> Number:
     except ValueError as exc:
         raise InvalidArrayError(f"could not parse number {raw!r}") from exc
 
+
 def coerce_target(raw: str | Number, array: tuple[Number, ...]) -> Number:
+    """Coerce the target to a number."""
     if isinstance(raw, (int, float)) and not isinstance(raw, bool):
         return raw
     text = str(raw)
@@ -79,12 +89,15 @@ def coerce_target(raw: str | Number, array: tuple[Number, ...]) -> Number:
 
 
 def generate_random(count: int, seed: int | None = None) -> tuple[int, ...]:
+    """Generate a random array of integers."""
     if count <= 0:
         raise InvalidArrayError("--random must be greater than zero")
     rng = random.Random(seed)
     return tuple(sorted(rng.randint(0, max(10, count * 3)) for _ in range(count)))
 
+
 def parse_range(spec: str) -> tuple[int, ...]:
+    """Parse a range of integers."""
     match = re.fullmatch(r"\s*(-?\d+)\s*-\s*(-?\d+)\s*", spec)
     if not match:
         raise InvalidArrayError("--range must look like A-B, for example 1-100")
@@ -94,7 +107,9 @@ def parse_range(spec: str) -> tuple[int, ...]:
         raise InvalidArrayError("--range start must be less than or equal to stop")
     return tuple(range(start, stop + 1))
 
+
 def parse_sizes(raw: str) -> tuple[int, ...]:
+    """Parse a comma-separated list of sizes."""
     sizes = tuple(int(part) for part in raw.split(",") if part.strip())
     if not sizes or any(size <= 0 for size in sizes):
         raise InvalidArrayError("--sizes must contain positive integers")
@@ -102,4 +117,6 @@ def parse_sizes(raw: str) -> tuple[int, ...]:
 
 
 def namespace_has_replay(args: Any) -> bool:
+    """Check if the namespace has a replay attribute."""
     return bool(getattr(args, "replay", None))
+
