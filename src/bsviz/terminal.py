@@ -15,3 +15,20 @@ else:  # pragma: no cover - exercised on Unix terminals
     import select
     import termios
     import tty
+
+
+
+@contextlib.contextmanager
+def raw_terminal() -> Iterator[None]:
+    if os.name == "nt":
+        yield
+        return
+
+    fd = sys.stdin.fileno()
+    original = termios.tcgetattr(fd)  # type: ignore[attr-defined]
+    try:
+        tty.setcbreak(fd)  # type: ignore[attr-defined]
+        yield
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, original)  # type: ignore[attr-defined]
+
