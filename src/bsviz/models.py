@@ -137,3 +137,19 @@ class SearchResult:
     total_comparisons: int
     elapsed_ms: float
     found_index: int | None
+
+    @classmethod
+    def from_states(cls, states: list[SearchState] | tuple[SearchState, ...]) -> SearchResult:
+        if not states:
+            raise ValueError("cannot summarize an empty search")
+        last = states[-1]
+        return cls(
+            variant=last.variant,
+            outcome=last.outcome,
+            target=last.target,
+            steps_taken=len(states),
+            total_comparisons=last.comparisons,
+            elapsed_ms=last.elapsed_ms,
+            found_index=last.result_index,
+        )
+
