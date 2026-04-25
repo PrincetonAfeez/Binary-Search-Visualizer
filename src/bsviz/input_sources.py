@@ -27,3 +27,18 @@ def add_source_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 
+def resolve_array(args: argparse.Namespace, seed: int | None = None) -> tuple[Number, ...]:
+    if args.array:
+        return parse_array_text(args.array)
+    if args.file:
+        return parse_array_text(args.file.read_text(encoding="utf-8"))
+    if args.stdin:
+        return parse_array_text(sys.stdin.read())
+    if args.random is not None:
+        return generate_random(args.random, seed)
+    if args.range_spec:
+        return parse_range(args.range_spec)
+    if args.preset:
+        return PRESETS[args.preset]
+    return PRESETS["duplicates"]
+
