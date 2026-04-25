@@ -42,3 +42,9 @@ def resolve_array(args: argparse.Namespace, seed: int | None = None) -> tuple[Nu
         return PRESETS[args.preset]
     return PRESETS["duplicates"]
 
+def parse_array_text(text: str) -> tuple[Number, ...]:
+    tokens = [token for token in re.split(r"[\s,]+", text.strip()) if token]
+    if not tokens:
+        raise InvalidArrayError("array input did not contain any numbers")
+    return tuple(parse_number(token) for token in tokens)
+
