@@ -93,3 +93,9 @@ def parse_range(spec: str) -> tuple[int, ...]:
     if start > stop:
         raise InvalidArrayError("--range start must be less than or equal to stop")
     return tuple(range(start, stop + 1))
+
+def parse_sizes(raw: str) -> tuple[int, ...]:
+    sizes = tuple(int(part) for part in raw.split(",") if part.strip())
+    if not sizes or any(size <= 0 for size in sizes):
+        raise InvalidArrayError("--sizes must contain positive integers")
+    return sizes
