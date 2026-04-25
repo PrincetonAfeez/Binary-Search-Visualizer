@@ -167,3 +167,20 @@ class CompositeRenderer(BaseRenderer):
         top = _side_by_side(self.main.render(state), self.variables.render(state))
         log = self.log.render(state)
         return top if not log else f"{top}\n\n{log}"
+
+
+def renderer_for(name: str, scheme: ColorScheme | None = None, use_color: bool = True) -> Renderer:
+    normalized = name.strip().lower()
+    if normalized == "minimal":
+        return MinimalRenderer()
+    main: Renderer
+    if normalized == "bar":
+        main = BarRenderer(scheme, use_color)
+    elif normalized == "table":
+        main = TableRenderer(scheme, use_color)
+    elif normalized == "tree":
+        main = TreeRenderer(scheme, use_color)
+    else:
+        valid = "bar, table, tree, minimal"
+        raise ValueError(f"unknown renderer {name!r}; choose one of: {valid}")
+    return CompositeRenderer(main, scheme, use_color)
