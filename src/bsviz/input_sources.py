@@ -56,3 +56,23 @@ def parse_number(raw: str) -> Number:
         return float(value)
     except ValueError as exc:
         raise InvalidArrayError(f"could not parse number {raw!r}") from exc
+
+def coerce_target(raw: str | Number, array: tuple[Number, ...]) -> Number:
+    if isinstance(raw, (int, float)) and not isinstance(raw, bool):
+        return raw
+    text = str(raw)
+    if not array:
+        return parse_number(text)
+    array_type = type(array[0])
+    try:
+        if array_type is int:
+            if not re.fullmatch(r"[+-]?\d+", text.strip()):
+                raise ValueError
+            return int(text)
+        if array_type is float:
+            return float(text)
+    except ValueError as exc:
+        raise InvalidArrayError(
+            f"target {raw!r} cannot be parsed as {array_type.__name__}"
+        ) from exc
+    return parse_number(text)
