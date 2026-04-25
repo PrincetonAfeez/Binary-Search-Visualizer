@@ -77,3 +77,8 @@ class SearchState:
     note: str = ""
     history: tuple[ComparisonEvent, ...] = ()
 
+    @property
+    def mid_value(self) -> Number | None:
+        if self.mid is None:
+            return None
+        return self.array[self.mid]
