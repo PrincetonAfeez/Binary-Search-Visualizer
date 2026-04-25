@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/search-state.schema.json",
+  "title": "SearchState",
+  "description": "The JSON payload for one immutable visualized binary-search step, as written to replay/export JSONL.",
+  "type": "object",
+  "required": [
+    "array",
+    "low",
+    "high",
+    "mid",
+    "target",
+    "comparison",
+    "step",
+    "comparisons",
+    "outcome",
+    "variant",
+    "result_index",
+    "elapsed_ms",
+    "note",
+    "history"
+  ],
+  "properties": {
+    "array": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/number"
+      },
+      "description": "Sorted values being searched."
+    },
+    "low": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "high": {
+      "type": "integer",
+      "minimum": -1
+    },
+    "mid": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "target": {
+      "$ref": "common.schema.json#/$defs/number"
+    },
+    "comparison": {
+      "$ref": "common.schema.json#/$defs/comparisonResult"
+    },
+    "step": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "comparisons": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "outcome": {
+      "$ref": "common.schema.json#/$defs/searchOutcome"
+    },
+    "variant": {
+      "$ref": "common.schema.json#/$defs/variant"
+    },
+    "result_index": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "elapsed_ms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "note": {
+      "type": "string"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "comparison-event.schema.json"
+      },
+      "description": "Comparison events accumulated up to this state."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "array": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "low": 0,
+      "high": 4,
+      "mid": 2,
+      "target": 7,
+      "comparison": "less",
+      "step": 1,
+      "comparisons": 1,
+      "outcome": "in_progress",
+      "variant": "classic",
+      "result_index": null,
+      "elapsed_ms": 0.012,
+      "note": "target is greater than middle value; move low right",
+      "history": [
+        {
+          "step": 1,
+          "low": 0,
+          "high": 4,
+          "mid": 2,
+          "value": 5,
+          "comparison": "less"
+        }
+      ]
+    }
+  ]
+}

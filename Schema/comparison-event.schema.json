@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/comparison-event.schema.json",
+  "title": "ComparisonEvent",
+  "description": "One comparison made by the binary search engine.",
+  "type": "object",
+  "required": [
+    "step",
+    "low",
+    "high",
+    "mid",
+    "value",
+    "comparison"
+  ],
+  "properties": {
+    "step": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "low": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "high": {
+      "type": "integer",
+      "minimum": -1
+    },
+    "mid": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "value": {
+      "$ref": "common.schema.json#/$defs/number"
+    },
+    "comparison": {
+      "$ref": "common.schema.json#/$defs/comparisonResult"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "step": 1,
+      "low": 0,
+      "high": 4,
+      "mid": 2,
+      "value": 5,
+      "comparison": "less"
+    }
+  ]
+}

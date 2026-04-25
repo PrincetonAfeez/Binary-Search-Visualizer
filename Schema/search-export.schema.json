@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/search-export.schema.json",
+  "title": "Search Export",
+  "description": "Schema for a parsed replay/export file. Each JSONL line should individually match search-state.schema.json; this array form is useful after loading all lines.",
+  "type": "array",
+  "items": {
+    "$ref": "search-state.schema.json"
+  },
+  "minItems": 1
+}

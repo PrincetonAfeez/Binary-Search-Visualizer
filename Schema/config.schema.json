@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/config.schema.json",
+  "title": "bsviz config.toml",
+  "description": "Schema for ~/.bsviz/config.toml defaults.",
+  "type": "object",
+  "properties": {
+    "variant": {
+      "$ref": "common.schema.json#/$defs/variant",
+      "default": "classic"
+    },
+    "renderer": {
+      "$ref": "common.schema.json#/$defs/renderer",
+      "default": "bar"
+    },
+    "colors": {
+      "$ref": "common.schema.json#/$defs/colorScheme",
+      "default": "classic"
+    },
+    "speed": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 2.0
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "variant": "classic",
+      "renderer": "bar",
+      "colors": "classic",
+      "speed": 2.0,
+      "seed": 42
+    }
+  ]
+}

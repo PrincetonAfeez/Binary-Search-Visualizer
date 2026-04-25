@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/common.schema.json",
+  "title": "Binary Search Visualizer Common Types",
+  "type": "object",
+  "$defs": {
+    "number": {
+      "type": "number",
+      "description": "An integer or floating-point value used by the visualizer."
+    },
+    "integerOrNull": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "variant": {
+      "type": "string",
+      "enum": [
+        "classic",
+        "leftmost",
+        "rightmost",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "description": "Binary search variant supported by bsviz."
+    },
+    "comparisonResult": {
+      "type": "string",
+      "enum": [
+        "less",
+        "equal",
+        "greater",
+        "not_applicable"
+      ],
+      "description": "Result of comparing array[mid] with the target."
+    },
+    "searchOutcome": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "found",
+        "not_found",
+        "aborted"
+      ],
+      "description": "Lifecycle status for a visualized search state."
+    },
+    "renderer": {
+      "type": "string",
+      "enum": [
+        "bar",
+        "table",
+        "tree",
+        "minimal"
+      ],
+      "description": "Text renderer name accepted by the CLI."
+    },
+    "colorScheme": {
+      "type": "string",
+      "enum": [
+        "classic",
+        "monochrome",
+        "colorblind-safe"
+      ],
+      "description": "ANSI color scheme name accepted by the CLI."
+    },
+    "preset": {
+      "type": "string",
+      "enum": [
+        "best-case",
+        "worst-case",
+        "duplicates"
+      ],
+      "description": "Built-in teaching data preset."
+    }
+  },
+  "additionalProperties": false
+}

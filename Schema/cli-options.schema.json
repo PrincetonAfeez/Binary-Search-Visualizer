@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/cli-options.schema.json",
+  "title": "bsviz CLI options",
+  "description": "A simple object form of supported bsviz CLI commands and options.",
+  "type": "object",
+  "required": [
+    "command"
+  ],
+  "properties": {
+    "command": {
+      "type": "string",
+      "enum": [
+        "visualize",
+        "step",
+        "compare",
+        "explain",
+        "bench"
+      ]
+    },
+    "variant": {
+      "$ref": "common.schema.json#/$defs/variant"
+    },
+    "renderer": {
+      "$ref": "common.schema.json#/$defs/renderer"
+    },
+    "colors": {
+      "$ref": "common.schema.json#/$defs/colorScheme"
+    },
+    "no_color": {
+      "type": "boolean",
+      "default": false
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "array": {
+      "type": "string",
+      "description": "Comma- or space-separated numbers, e.g. '1,3,5,7,9'."
+    },
+    "file": {
+      "type": "string",
+      "description": "Path to a file containing numbers."
+    },
+    "stdin": {
+      "type": "boolean",
+      "description": "Read numbers from standard input."
+    },
+    "random": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Generate N sorted random integers."
+    },
+    "range": {
+      "type": "string",
+      "pattern": "^\\s*-?\\d+\\s*-\\s*-?\\d+\\s*$",
+      "description": "Inclusive integer range, e.g. '1-100'."
+    },
+    "preset": {
+      "$ref": "common.schema.json#/$defs/preset"
+    },
+    "speed": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "export": {
+      "type": "string",
+      "description": "Path to write replay JSONL."
+    },
+    "export_frames": {
+      "type": "string",
+      "description": "Directory to write rendered text frames."
+    },
+    "replay": {
+      "type": "string",
+      "description": "Path to read previously exported JSONL states."
+    },
+    "sizes": {
+      "type": "string",
+      "pattern": "^\\s*\\d+(\\s*,\\s*\\d+)*\\s*$",
+      "default": "100,1000,10000,100000"
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "array"
+      ]
+    },
+    {
+      "required": [
+        "file"
+      ]
+    },
+    {
+      "required": [
+        "stdin"
+      ]
+    },
+    {
+      "required": [
+        "random"
+      ]
+    },
+    {
+      "required": [
+        "range"
+      ]
+    },
+    {
+      "required": [
+        "preset"
+      ]
+    },
+    {
+      "required": [
+        "replay"
+      ]
+    },
+    {
+      "description": "No source provided; bsviz uses the duplicates preset by default."
+    }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "command": "step",
+      "array": "1,3,5,7,9",
+      "target": 7,
+      "variant": "classic",
+      "renderer": "bar"
+    },
+    {
+      "command": "bench",
+      "sizes": "100,1000,10000",
+      "variant": "classic"
+    }
+  ]
+}

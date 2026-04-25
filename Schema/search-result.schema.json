@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PrincetonAfeez/Binary-Search-Visualizer/Schema/search-result.schema.json",
+  "title": "SearchResult",
+  "description": "Summary produced from a completed list of SearchState objects.",
+  "type": "object",
+  "required": [
+    "variant",
+    "outcome",
+    "target",
+    "steps_taken",
+    "total_comparisons",
+    "elapsed_ms",
+    "found_index"
+  ],
+  "properties": {
+    "variant": {
+      "$ref": "common.schema.json#/$defs/variant"
+    },
+    "outcome": {
+      "$ref": "common.schema.json#/$defs/searchOutcome"
+    },
+    "target": {
+      "$ref": "common.schema.json#/$defs/number"
+    },
+    "steps_taken": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_comparisons": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "elapsed_ms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "found_index": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
