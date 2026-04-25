@@ -68,3 +68,18 @@ class Display:
         self.stream = stream
         self._last_lines: list[str] = []
 
+    def draw(self, text: str) -> None:
+        if not self.stream.isatty():
+            print(text, file=self.stream)
+            return
+        lines = text.splitlines()
+        if not self._last_lines:
+            self.stream.write(HIDE_CURSOR + CLEAR_SCREEN + move_to(1, 1) + text)
+        else:
+            for index in range(max(len(lines), len(self._last_lines))):
+                current = lines[index] if index < len(lines) else ""
+                previous = self._last_lines[index] if index < len(self._last_lines) else ""
+                if current != previous:
+                    self.stream.write(move_to(index + 1, 1) + clear_line() + current)
+        self.stream.flush()
+        self._last_lines = lines
