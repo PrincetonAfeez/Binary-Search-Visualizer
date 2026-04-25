@@ -17,3 +17,11 @@ class SearchOutcome(str, Enum):
     FOUND = "found"
     NOT_FOUND = "not_found"
     ABORTED = "aborted"
+
+class Variant(str, Enum):
+    CLASSIC = "classic"
+    LEFTMOST = "leftmost"
+    RIGHTMOST = "rightmost"
+    LOWER_BOUND = "lower_bound"
+    UPPER_BOUND = "upper_bound"
+
