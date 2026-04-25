@@ -76,3 +76,11 @@ def coerce_target(raw: str | Number, array: tuple[Number, ...]) -> Number:
             f"target {raw!r} cannot be parsed as {array_type.__name__}"
         ) from exc
     return parse_number(text)
+
+
+def generate_random(count: int, seed: int | None = None) -> tuple[int, ...]:
+    if count <= 0:
+        raise InvalidArrayError("--random must be greater than zero")
+    rng = random.Random(seed)
+    return tuple(sorted(rng.randint(0, max(10, count * 3)) for _ in range(count)))
+
