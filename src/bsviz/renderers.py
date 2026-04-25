@@ -122,3 +122,23 @@ class TreeRenderer(BaseRenderer):
         if state.is_terminal:
             lines.append(self._paint(_terminal_line(state), "found" if state.result_index is not None else "muted"))
         return "\n".join(lines)
+
+
+class VariablesRenderer(BaseRenderer):
+    def render(self, state: SearchState) -> str:
+        mid = "-" if state.mid is None else state.mid
+        value = "-" if state.mid_value is None else repr(state.mid_value)
+        result = "-" if state.result_index is None else state.result_index
+        return "\n".join(
+            [
+                f"variant:     {state.variant.value}",
+                f"target:      {state.target!r}",
+                f"low/mid/high:{state.low}/{mid}/{state.high}",
+                f"mid value:   {value}",
+                f"comparison:  {state.comparison.value}",
+                f"outcome:     {state.outcome.value}",
+                f"result:      {result}",
+                f"comparisons: {state.comparisons}",
+                f"elapsed:     {state.elapsed_ms:.3f} ms",
+            ]
+        )
