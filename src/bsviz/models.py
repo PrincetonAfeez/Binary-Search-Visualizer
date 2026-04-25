@@ -38,3 +38,13 @@ class ComparisonEvent:
     mid: int
     value: Number
     comparison: ComparisonResult
+
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "step": self.step,
+            "low": self.low,
+            "high": self.high,
+            "mid": self.mid,
+            "value": self.value,
+            "comparison": self.comparison.value,
+        }
