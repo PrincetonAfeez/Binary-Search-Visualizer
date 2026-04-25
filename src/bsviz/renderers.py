@@ -21,3 +21,14 @@ class BaseRenderer(Renderer):
         color = getattr(self.scheme, role)
         return colorize(text, color, self.use_color)
 
+class MinimalRenderer(Renderer):
+    def render(self, state: SearchState) -> str:
+        mid = "-" if state.mid is None else str(state.mid)
+        value = "-" if state.mid_value is None else repr(state.mid_value)
+        result = "-" if state.result_index is None else str(state.result_index)
+        return (
+            f"step={state.step} variant={state.variant.value} low={state.low} "
+            f"mid={mid} high={state.high} value={value} target={state.target!r} "
+            f"comparison={state.comparison.value} outcome={state.outcome.value} "
+            f"result={result} comparisons={state.comparisons}"
+        )
