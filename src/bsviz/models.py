@@ -48,3 +48,14 @@ class ComparisonEvent:
             "value": self.value,
             "comparison": self.comparison.value,
         }
+
+    @classmethod
+    def from_json(cls, payload: dict[str, Any]) -> ComparisonEvent:
+        return cls(
+            step=int(payload["step"]),
+            low=int(payload["low"]),
+            high=int(payload["high"]),
+            mid=int(payload["mid"]),
+            value=payload["value"],
+            comparison=ComparisonResult(payload["comparison"]),
+        )
