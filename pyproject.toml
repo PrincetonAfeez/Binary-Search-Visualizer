@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "binary-search-visualizer"
+version = "0.1.0"
+description = "A terminal binary search visualizer with multiple search variants."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Binary Search Visualizer" }]
+license = "MIT"
+keywords = ["binary-search", "visualizer", "teaching", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "hypothesis>=6", "ruff>=0.7", "mypy>=1.10"]
+
+[project.scripts]
+bsviz = "bsviz.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
