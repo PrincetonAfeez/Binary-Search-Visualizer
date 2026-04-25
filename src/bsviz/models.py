@@ -82,3 +82,7 @@ class SearchState:
         if self.mid is None:
             return None
         return self.array[self.mid]
+
+    @property
+    def is_terminal(self) -> bool:
+        return self.outcome is not SearchOutcome.IN_PROGRESS
