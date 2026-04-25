@@ -79,3 +79,26 @@ class TableRenderer(BaseRenderer):
             for index, width in enumerate(widths)
         ) + "|"
         return "\n".join([divider, index_row, divider, value_row, divider, marker_row, divider])
+
+    def _role_for_index(self, state: SearchState, index: int) -> str:
+        if state.result_index == index and state.outcome is not SearchOutcome.IN_PROGRESS:
+            return "found"
+        if state.mid == index:
+            return "mid"
+        if index < state.low or index > state.high:
+            return "eliminated"
+        if index == state.low or index == state.high:
+            return "low"
+        return "text"
+
+    def _marker_for_index(self, state: SearchState, index: int) -> str:
+        markers: list[str] = []
+        if index == state.low:
+            markers.append("L")
+        if index == state.mid:
+            markers.append("M")
+        if index == state.high:
+            markers.append("H")
+        if state.result_index == index:
+            markers.append("R")
+        return "/".join(markers)
