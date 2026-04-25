@@ -1,3 +1,5 @@
+"""Terminal display and raw key input."""
+
 from __future__ import annotations
 
 import contextlib
@@ -17,9 +19,9 @@ else:  # pragma: no cover - exercised on Unix terminals
     import tty
 
 
-
 @contextlib.contextmanager
 def raw_terminal() -> Iterator[None]:
+    """Context manager for raw terminal input."""
     if os.name == "nt":
         yield
         return
@@ -32,7 +34,9 @@ def raw_terminal() -> Iterator[None]:
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, original)  # type: ignore[attr-defined]
 
+
 def read_key(timeout: float) -> str | None:
+    """Read a key from the terminal."""
     if os.name == "nt":
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
@@ -63,12 +67,21 @@ def read_key(timeout: float) -> str | None:
         return "space"
     return char
 
+
 class Display:
+    """Diff-based terminal redraw.
+
+    Only changed lines are rewritten after the first frame. Non-TTY output falls
+    back to plain printing so tests and pipes remain readable.
+    """
+
     def __init__(self, stream: TextIO = sys.stdout) -> None:
+        """Initialize the display."""
         self.stream = stream
         self._last_lines: list[str] = []
 
     def draw(self, text: str) -> None:
+        """Draw the text on the display."""
         if not self.stream.isatty():
             print(text, file=self.stream)
             return
@@ -84,8 +97,8 @@ class Display:
         self.stream.flush()
         self._last_lines = lines
 
-
     def close(self) -> None:
+        """Close the display."""
         if self.stream.isatty():
             self.stream.write(SHOW_CURSOR + "\n")
             self.stream.flush()
