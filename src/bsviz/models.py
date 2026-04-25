@@ -86,3 +86,22 @@ class SearchState:
     @property
     def is_terminal(self) -> bool:
         return self.outcome is not SearchOutcome.IN_PROGRESS
+
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "array": list(self.array),
+            "low": self.low,
+            "high": self.high,
+            "mid": self.mid,
+            "target": self.target,
+            "comparison": self.comparison.value,
+            "step": self.step,
+            "comparisons": self.comparisons,
+            "outcome": self.outcome.value,
+            "variant": self.variant.value,
+            "result_index": self.result_index,
+            "elapsed_ms": self.elapsed_ms,
+            "note": self.note,
+            "history": [event.to_json() for event in self.history],
+        }
+
