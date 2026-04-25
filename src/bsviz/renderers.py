@@ -58,3 +58,24 @@ class BarRenderer(BaseRenderer):
         if state.array[index] == state.target:
             return "target"
         return "text"
+
+class TableRenderer(BaseRenderer):
+    def render(self, state: SearchState) -> str:
+        values = [repr(value) for value in state.array]
+        widths = [
+            max(len(str(index)), len(value), 3) for index, value in enumerate(values)
+        ]
+        divider = "+" + "+".join("-" * (width + 2) for width in widths) + "+"
+        index_row = "|" + "|".join(
+            f" {self._paint(str(index).center(width), 'muted')} "
+            for index, width in enumerate(widths)
+        ) + "|"
+        value_row = "|" + "|".join(
+            f" {self._paint(values[index].center(width), self._role_for_index(state, index))} "
+            for index, width in enumerate(widths)
+        ) + "|"
+        marker_row = "|" + "|".join(
+            f" {self._marker_for_index(state, index).center(width)} "
+            for index, width in enumerate(widths)
+        ) + "|"
+        return "\n".join([divider, index_row, divider, value_row, divider, marker_row, divider])
