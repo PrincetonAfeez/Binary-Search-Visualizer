@@ -243,3 +243,16 @@ def _side_by_side(left: str, right: str, gap: int = 4) -> str:
         output.append(f"{left_line}{padding}{right_line}")
     return "\n".join(output)
 
+def _strip_ansi(value: str) -> str:
+    result: list[str] = []
+    index = 0
+    while index < len(value):
+        if value[index] == "\033":
+            index += 1
+            while index < len(value) and value[index] != "m":
+                index += 1
+        else:
+            result.append(value[index])
+        index += 1
+    return "".join(result)
+
