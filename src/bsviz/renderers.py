@@ -32,3 +32,29 @@ class MinimalRenderer(Renderer):
             f"comparison={state.comparison.value} outcome={state.outcome.value} "
             f"result={result} comparisons={state.comparisons}"
         )
+
+class BarRenderer(BaseRenderer):
+    def render(self, state: SearchState) -> str:
+        """Render the bar for a search state."""
+        cells: list[str] = []
+        for index, value in enumerate(state.array):
+            label = f"{index}:{value!r}"
+            role = self._role_for_index(state, index)
+            cells.append(self._paint(f"[{label}]", role))
+        pointer = [" " * len(_plain_cell(index, value)) for index, value in enumerate(state.array)]
+        if state.mid is not None:
+            pointer[state.mid] = " " * max(0, len(pointer[state.mid]) // 2) + "^"
+        return " ".join(cells) + "\n" + " ".join(pointer)
+
+    def _role_for_index(self, state: SearchState, index: int) -> str:
+        if state.result_index == index and state.outcome is not SearchOutcome.IN_PROGRESS:
+            return "found"
+        if state.mid == index:
+            return "mid"
+        if index == state.low or index == state.high:
+            return "low"
+        if index < state.low or index > state.high:
+            return "eliminated"
+        if state.array[index] == state.target:
+            return "target"
+        return "text"
