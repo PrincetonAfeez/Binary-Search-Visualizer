@@ -16,3 +16,14 @@ PRESETS: dict[str, tuple[int, ...]] = {
     "duplicates": (1, 2, 2, 2, 4, 5, 5, 8, 13, 13, 21),
 }
 
+def add_source_arguments(parser: argparse.ArgumentParser) -> None:
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--array", help="comma- or space-separated numbers")
+    source.add_argument("--file", type=Path, help="read numbers from a file")
+    source.add_argument("--stdin", action="store_true", help="read numbers from stdin")
+    source.add_argument("--random", type=int, metavar="N", help="generate N sorted random ints")
+    source.add_argument("--range", dest="range_spec", metavar="A-B", help="generate an inclusive range")
+    source.add_argument("--preset", choices=sorted(PRESETS), help="use a teaching preset")
+
+
+
