@@ -59,3 +59,21 @@ class ComparisonEvent:
             value=payload["value"],
             comparison=ComparisonResult(payload["comparison"]),
         )
+
+@dataclass(frozen=True)
+class SearchState:
+    array: tuple[Number, ...]
+    low: int
+    high: int
+    mid: int | None
+    target: Number
+    comparison: ComparisonResult
+    step: int
+    comparisons: int
+    outcome: SearchOutcome
+    variant: Variant
+    result_index: int | None = None
+    elapsed_ms: float = 0.0
+    note: str = ""
+    history: tuple[ComparisonEvent, ...] = ()
+
