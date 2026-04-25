@@ -127,3 +127,13 @@ class SearchState:
                 ComparisonEvent.from_json(event) for event in payload.get("history", [])
             ),
         )
+
+@dataclass(frozen=True)
+class SearchResult:
+    variant: Variant
+    outcome: SearchOutcome
+    target: Number
+    steps_taken: int
+    total_comparisons: int
+    elapsed_ms: float
+    found_index: int | None
