@@ -142,3 +142,15 @@ class VariablesRenderer(BaseRenderer):
                 f"elapsed:     {state.elapsed_ms:.3f} ms",
             ]
         )
+
+class LogRenderer(BaseRenderer):
+    def render(self, state: SearchState) -> str:
+        recent = state.history[-5:]
+        if not recent and not state.note:
+            return ""
+        lines = ["log"]
+        for event in recent:
+            lines.append(_event_line(event, state.target))
+        if state.note:
+            lines.append(self._paint(state.note, "muted"))
+        return "\n".join(lines)
