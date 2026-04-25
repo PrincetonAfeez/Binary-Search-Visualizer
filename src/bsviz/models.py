@@ -105,3 +105,25 @@ class SearchState:
             "history": [event.to_json() for event in self.history],
         }
 
+    @classmethod
+    def from_json(cls, payload: dict[str, Any]) -> SearchState:
+        return cls(
+            array=tuple(payload["array"]),
+            low=int(payload["low"]),
+            high=int(payload["high"]),
+            mid=None if payload["mid"] is None else int(payload["mid"]),
+            target=payload["target"],
+            comparison=ComparisonResult(payload["comparison"]),
+            step=int(payload["step"]),
+            comparisons=int(payload["comparisons"]),
+            outcome=SearchOutcome(payload["outcome"]),
+            variant=Variant(payload["variant"]),
+            result_index=None
+            if payload.get("result_index") is None
+            else int(payload["result_index"]),
+            elapsed_ms=float(payload.get("elapsed_ms", 0.0)),
+            note=str(payload.get("note", "")),
+            history=tuple(
+                ComparisonEvent.from_json(event) for event in payload.get("history", [])
+            ),
+        )
