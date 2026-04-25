@@ -63,3 +63,8 @@ def read_key(timeout: float) -> str | None:
         return "space"
     return char
 
+class Display:
+    def __init__(self, stream: TextIO = sys.stdout) -> None:
+        self.stream = stream
+        self._last_lines: list[str] = []
+
