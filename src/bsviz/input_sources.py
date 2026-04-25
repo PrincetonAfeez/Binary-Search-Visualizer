@@ -99,3 +99,7 @@ def parse_sizes(raw: str) -> tuple[int, ...]:
     if not sizes or any(size <= 0 for size in sizes):
         raise InvalidArrayError("--sizes must contain positive integers")
     return sizes
+
+
+def namespace_has_replay(args: Any) -> bool:
+    return bool(getattr(args, "replay", None))
