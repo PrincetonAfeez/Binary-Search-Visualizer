@@ -184,3 +184,62 @@ def renderer_for(name: str, scheme: ColorScheme | None = None, use_color: bool =
         valid = "bar, table, tree, minimal"
         raise ValueError(f"unknown renderer {name!r}; choose one of: {valid}")
     return CompositeRenderer(main, scheme, use_color)
+
+
+def available_renderers() -> tuple[str, ...]:
+    """Available renderers."""
+    return ("bar", "table", "tree", "minimal")
+
+
+def render_states(states: Iterable[SearchState], renderer: Renderer) -> str:
+    """Render a sequence of search states."""
+    frames = []
+    for state in states:
+        frames.append(renderer.render(state))
+    return "\n\n".join(frames)
+
+
+def _plain_cell(index: int, value: object) -> str:
+    """Plain cell for a value."""
+    return f"[{index}:{value!r}]"
+
+
+def _comparison_symbol(comparison: ComparisonResult) -> str:
+    """Comparison symbol for a comparison result."""
+    if comparison is ComparisonResult.LESS:
+        return "<"
+    if comparison is ComparisonResult.GREATER:
+        return ">"
+    if comparison is ComparisonResult.EQUAL:
+        return "=="
+    return "?"
+
+
+def _event_line(event: ComparisonEvent, target: object) -> str:
+    """Event line for a comparison event."""
+    return (
+        f"step {event.step}: idx {event.mid}, value {event.value!r} "
+        f"{_comparison_symbol(event.comparison)} {target!r}"
+    )
+
+
+def _terminal_line(state: SearchState) -> str:
+    """Terminal line for a search state."""
+    if state.result_index is None:
+        return f"terminal: {state.outcome.value}"
+    return f"terminal: {state.outcome.value} at index {state.result_index}"
+
+
+def _side_by_side(left: str, right: str, gap: int = 4) -> str:
+    left_lines = left.splitlines() or [""]
+    right_lines = right.splitlines() or [""]
+    width = max(len(_strip_ansi(line)) for line in left_lines)
+    rows = max(len(left_lines), len(right_lines))
+    output: list[str] = []
+    for row in range(rows):
+        left_line = left_lines[row] if row < len(left_lines) else ""
+        right_line = right_lines[row] if row < len(right_lines) else ""
+        padding = " " * (width - len(_strip_ansi(left_line)) + gap)
+        output.append(f"{left_line}{padding}{right_line}")
+    return "\n".join(output)
+
