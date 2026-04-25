@@ -83,3 +83,9 @@ class Display:
                     self.stream.write(move_to(index + 1, 1) + clear_line() + current)
         self.stream.flush()
         self._last_lines = lines
+
+
+    def close(self) -> None:
+        if self.stream.isatty():
+            self.stream.write(SHOW_CURSOR + "\n")
+            self.stream.flush()
