@@ -154,3 +154,16 @@ class LogRenderer(BaseRenderer):
         if state.note:
             lines.append(self._paint(state.note, "muted"))
         return "\n".join(lines)
+
+
+class CompositeRenderer(BaseRenderer):
+    def __init__(self, main: Renderer, scheme: ColorScheme | None = None, use_color: bool = True) -> None:
+        super().__init__(scheme, use_color)
+        self.main = main
+        self.variables = VariablesRenderer(scheme, use_color)
+        self.log = LogRenderer(scheme, use_color)
+
+    def render(self, state: SearchState) -> str:
+        top = _side_by_side(self.main.render(state), self.variables.render(state))
+        log = self.log.render(state)
+        return top if not log else f"{top}\n\n{log}"
