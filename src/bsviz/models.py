@@ -25,3 +25,7 @@ class Variant(str, Enum):
     LOWER_BOUND = "lower_bound"
     UPPER_BOUND = "upper_bound"
 
+class ExecutionMode(str, Enum):
+    MANUAL = "manual"
+    AUTO = "auto"
+    FAST_FORWARD = "fast_forward"
