@@ -84,3 +84,12 @@ def generate_random(count: int, seed: int | None = None) -> tuple[int, ...]:
     rng = random.Random(seed)
     return tuple(sorted(rng.randint(0, max(10, count * 3)) for _ in range(count)))
 
+def parse_range(spec: str) -> tuple[int, ...]:
+    match = re.fullmatch(r"\s*(-?\d+)\s*-\s*(-?\d+)\s*", spec)
+    if not match:
+        raise InvalidArrayError("--range must look like A-B, for example 1-100")
+    start = int(match.group(1))
+    stop = int(match.group(2))
+    if start > stop:
+        raise InvalidArrayError("--range start must be less than or equal to stop")
+    return tuple(range(start, stop + 1))
