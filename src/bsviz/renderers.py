@@ -102,3 +102,23 @@ class TableRenderer(BaseRenderer):
         if state.result_index == index:
             markers.append("R")
         return "/".join(markers)
+
+
+class TreeRenderer(BaseRenderer):
+    def render(self, state: SearchState) -> str:
+        lines = ["search path"]
+        if not state.history:
+            lines.append("(no comparisons yet)")
+        for event in state.history:
+            current = event.step == state.step and state.mid == event.mid
+            prefix = "=> " if current else "   "
+            indent = "  " * event.step
+            symbol = _comparison_symbol(event.comparison)
+            text = (
+                f"{prefix}{indent}idx {event.mid}: {event.value!r} "
+                f"{symbol} {state.target!r}  window=[{event.low}, {event.high}]"
+            )
+            lines.append(self._paint(text, "mid" if current else "text"))
+        if state.is_terminal:
+            lines.append(self._paint(_terminal_line(state), "found" if state.result_index is not None else "muted"))
+        return "\n".join(lines)
