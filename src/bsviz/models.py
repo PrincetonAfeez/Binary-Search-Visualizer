@@ -1,3 +1,5 @@
+"""Immutable domain objects shared by algorithms, renderers, and replay."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,32 +8,42 @@ from typing import Any, TypeAlias
 
 Number: TypeAlias = int | float
 
+
 class ComparisonResult(str, Enum):
+    """Comparison result."""
     LESS = "less"
     EQUAL = "equal"
     GREATER = "greater"
     NOT_APPLICABLE = "not_applicable"
 
+
 class SearchOutcome(str, Enum):
+    """Search outcome."""
     IN_PROGRESS = "in_progress"
     FOUND = "found"
     NOT_FOUND = "not_found"
     ABORTED = "aborted"
 
+
 class Variant(str, Enum):
+    """Variant."""
     CLASSIC = "classic"
     LEFTMOST = "leftmost"
     RIGHTMOST = "rightmost"
     LOWER_BOUND = "lower_bound"
     UPPER_BOUND = "upper_bound"
 
+
 class ExecutionMode(str, Enum):
+    """Execution mode."""
     MANUAL = "manual"
     AUTO = "auto"
     FAST_FORWARD = "fast_forward"
 
+
 @dataclass(frozen=True)
 class ComparisonEvent:
+    """One actual array comparison made by the search engine."""
     step: int
     low: int
     high: int
@@ -40,6 +52,7 @@ class ComparisonEvent:
     comparison: ComparisonResult
 
     def to_json(self) -> dict[str, Any]:
+        """Convert the comparison event to a JSON payload."""
         return {
             "step": self.step,
             "low": self.low,
@@ -51,6 +64,7 @@ class ComparisonEvent:
 
     @classmethod
     def from_json(cls, payload: dict[str, Any]) -> ComparisonEvent:
+        """Create a comparison event from a JSON payload."""
         return cls(
             step=int(payload["step"]),
             low=int(payload["low"]),
@@ -60,8 +74,10 @@ class ComparisonEvent:
             comparison=ComparisonResult(payload["comparison"]),
         )
 
+
 @dataclass(frozen=True)
 class SearchState:
+    """The complete immutable state for one visualized step."""
     array: tuple[Number, ...]
     low: int
     high: int
@@ -79,15 +95,18 @@ class SearchState:
 
     @property
     def mid_value(self) -> Number | None:
+        """Get the value at the mid index."""
         if self.mid is None:
             return None
         return self.array[self.mid]
 
     @property
     def is_terminal(self) -> bool:
+        """Check if the search state is a terminal state."""
         return self.outcome is not SearchOutcome.IN_PROGRESS
 
     def to_json(self) -> dict[str, Any]:
+        """Convert the search state to a JSON payload."""
         return {
             "array": list(self.array),
             "low": self.low,
@@ -107,6 +126,7 @@ class SearchState:
 
     @classmethod
     def from_json(cls, payload: dict[str, Any]) -> SearchState:
+        """Create a search state from a JSON payload."""
         return cls(
             array=tuple(payload["array"]),
             low=int(payload["low"]),
@@ -128,8 +148,11 @@ class SearchState:
             ),
         )
 
+
 @dataclass(frozen=True)
 class SearchResult:
+    """Summary produced after a search stream reaches a terminal state."""
+
     variant: Variant
     outcome: SearchOutcome
     target: Number
@@ -140,6 +163,7 @@ class SearchResult:
 
     @classmethod
     def from_states(cls, states: list[SearchState] | tuple[SearchState, ...]) -> SearchResult:
+        """Create a search result from a list of search states."""
         if not states:
             raise ValueError("cannot summarize an empty search")
         last = states[-1]
