@@ -6,3 +6,9 @@ from typing import Any, TypeAlias
 
 Number: TypeAlias = int | float
 
+class ComparisonResult(str, Enum):
+    LESS = "less"
+    EQUAL = "equal"
+    GREATER = "greater"
+    NOT_APPLICABLE = "not_applicable"
+
