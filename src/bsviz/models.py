@@ -12,3 +12,8 @@ class ComparisonResult(str, Enum):
     GREATER = "greater"
     NOT_APPLICABLE = "not_applicable"
 
+class SearchOutcome(str, Enum):
+    IN_PROGRESS = "in_progress"
+    FOUND = "found"
+    NOT_FOUND = "not_found"
+    ABORTED = "aborted"
